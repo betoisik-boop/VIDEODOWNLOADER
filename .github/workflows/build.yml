@@ -23,10 +23,11 @@ jobs:
       - name: Download ffmpeg.exe
         shell: pwsh
         run: |
-          $url = "https://github.com/GyanD/codexffmpeg/releases/download/2024-05-27-git-1c235b3531/ffmpeg-2024-05-27-git-1c235b3531-essentials_build.zip"
-          Invoke-WebRequest -Uri $url -OutFile ffmpeg.zip
+          $url = "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip"
+          Invoke-WebRequest -Uri $url -OutFile ffmpeg.zip -UseBasicParsing
           Expand-Archive ffmpeg.zip -DestinationPath ffmpeg_extract
           $ff = Get-ChildItem -Path ffmpeg_extract -Recurse -Filter ffmpeg.exe | Select-Object -First 1
+          if (-not $ff) { throw "ffmpeg.exe not found in archive" }
           Copy-Item $ff.FullName .\ffmpeg.exe
           Get-Item .\ffmpeg.exe | Format-List Name,Length
 
